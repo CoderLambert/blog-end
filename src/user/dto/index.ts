@@ -1,24 +1,29 @@
 import {
-  IsEmail,
-  IsString,
-  IsOptional,
   IsDateString,
+  IsEmail,
   IsNotEmpty,
+  IsNumberString,
+  IsString,
 } from 'class-validator';
-import { User, Prisma } from '@prisma/client';
+import { User } from '@prisma/client';
 import { PartialType } from '@nestjs/mapped-types';
 import { ApiProperty, PickType } from '@nestjs/swagger';
 
 // https://nestjs.bootcss.com/openapi/mapped-types
 
 export class UserDto implements User {
+  @ApiProperty()
+  @IsNumberString()
   id: number;
+
   @ApiProperty()
   @IsEmail()
+  @IsNotEmpty()
   email: string;
 
   @ApiProperty()
   @IsString()
+  @IsNotEmpty()
   name: string;
 
   @ApiProperty()
