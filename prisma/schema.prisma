@@ -1,6 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -11,32 +8,32 @@ datasource db {
 }
 
 model User {
-  id    Int     @id @default(autoincrement())
-  email String  @unique
-  name  String?
-  articles Article[]
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  lastLogin DateTime @updatedAt
+  id        Int       @id @default(autoincrement())
+  email     String    @unique
+  name      String?
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  lastLoginAt DateTime @updatedAt @default(now())
+  articles  Article[]
 }
 
 model Article {
-  id        Int     @id @default(autoincrement())
+  id        Int          @id @default(autoincrement())
   title     String
   content   String?
-  published Boolean @default(false)
-  author    User    @relation(fields: [authorId], references: [id])
+  published Boolean      @default(false)
   authorId  Int
-  tags ArticleTag[]
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt DateTime     @default(now())
+  updatedAt DateTime     @updatedAt
+  author    User         @relation(fields: [authorId], references: [id])
+  tags      ArticleTag[]
 }
 
 model ArticleTag {
-     id        Int     @id @default(autoincrement())
-     name     String
-     article       Article?   @relation(fields: [articleId], references: [id])
-     articleId  Int?
-     createdAt DateTime @default(now())
-     updatedAt DateTime @updatedAt
+  id        Int      @id @default(autoincrement())
+  name      String
+  articleId Int?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  article   Article? @relation(fields: [articleId], references: [id])
 }
