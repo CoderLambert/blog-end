@@ -1,18 +1,19 @@
+import helmet from 'helmet';
+
+import { ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
-import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
+import { swaggerInit } from './conifg/swagger';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-
-  const config = new DocumentBuilder()
-    .setTitle('Blog')
-    .setDescription('The Blog API description')
-    .setVersion('0.1')
-    .build();
-
-  const document = SwaggerModule.createDocument(app, config);
-  SwaggerModule.setup('api', app, document);
+  // 添加 Dto 验证
+  app.useGlobalPipes(new ValidationPipe());
+  // 跨域
+  app.enableCors();
+  swaggerInit(app);
+  // web 漏洞
+  app.use(helmet());
 
   await app.listen(3000);
 }
