@@ -6,27 +6,31 @@ import {
   Patch,
   Param,
   Delete,
+  Query,
 } from '@nestjs/common';
 import { UserService } from './user.service';
-import { CreateUserDto } from './dto/create-user.dto';
-import { UpdateUserDto } from './dto/update-user.dto';
 import { User, Prisma } from '@prisma/client';
 import {
   ApiBearerAuth,
+  ApiOkResponse,
   ApiOperation,
   ApiResponse,
   ApiTags,
+  getSchemaPath,
 } from '@nestjs/swagger';
+import { PaginatedDto } from '../dtos';
+import { ApiPaginatedResponse } from '../decorators';
+import { UserDto, UpdateUserDto, CreateUserDto } from './dto/';
 
 @ApiTags('用户相关')
-@Controller('user')
+@Controller('users')
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
   @Post()
   @ApiResponse({
     description: '返回当前创建用户对象',
-    type: CreateUserDto,
+    type: UserDto,
     status: 201,
   })
   create(@Body() createUserDto: CreateUserDto) {
@@ -34,8 +38,13 @@ export class UserController {
   }
 
   @Get()
-  findAll() {
-    return this.userService.findAll();
+  @ApiPaginatedResponse(UserDto)
+  async findAll(
+    @Query() limit: number,
+    @Query() offset: number,
+    @Query() size: number,
+  ): Promise<PaginatedDto<UserDto>> {
+    return this.userService.findAll() as any;
   }
 
   @Get(':id')

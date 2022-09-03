@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
-import { CreateUserDto } from './dto/create-user.dto';
-import { UpdateUserDto } from './dto/update-user.dto';
 import { PrismaService } from '../prisma/prisma.service';
-import { User, Prisma } from '@prisma/client';
+import { Prisma, User } from '@prisma/client';
+import { CreateUserDto } from './dto';
+
 @Injectable()
 export class UserService {
   constructor(private prisma: PrismaService) {}
@@ -20,11 +20,7 @@ export class UserService {
   }
 
   findAll() {
-    return this.prisma.user.findMany({
-      include: {
-        articles: true,
-      },
-    });
+    return this.prisma.user.findMany({});
   }
 
   findOne(userWhereUniqueInput: Prisma.UserWhereUniqueInput) {
