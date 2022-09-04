@@ -10,5 +10,7 @@ export function swaggerInit(app: INestApplication) {
     .setDescription(SITE_CONFIG.description)
     .build();
   const document = SwaggerModule.createDocument(app, options);
-  SwaggerModule.setup('api-doc', app, document);
+  SwaggerModule.setup('api-doc', app, document, {
+    explorer: true, // 开启搜索列
+  });
 }

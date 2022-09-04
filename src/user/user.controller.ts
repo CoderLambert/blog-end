@@ -7,32 +7,34 @@ import {
   Param,
   Delete,
   Query,
+  Type,
 } from '@nestjs/common';
 import { UserService } from './user.service';
-import { User, Prisma } from '@prisma/client';
+import { Prisma } from '@prisma/client';
 import {
-  ApiBearerAuth,
-  ApiOkResponse,
+  ApiExtraModels,
+  ApiForbiddenResponse,
   ApiOperation,
+  ApiQuery,
   ApiResponse,
   ApiTags,
-  getSchemaPath,
 } from '@nestjs/swagger';
 import { PaginatedDto } from '../dtos';
-import { ApiPaginatedResponse } from '../decorators';
-import { UserDto, UpdateUserDto, CreateUserDto } from './dto/';
+import { ApiCreatedSuccessResponse, ApiPaginatedResponse } from '../decorators';
+import { UserDto, CreateUserDto } from './dto/index.dto';
 
 @ApiTags('用户相关')
 @Controller('users')
+@ApiExtraModels(PaginatedDto)
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
   @Post()
-  @ApiResponse({
-    description: '返回当前创建用户对象',
-    type: UserDto,
-    status: 201,
+  @ApiOperation({
+    summary: '创建用户',
   })
+  @ApiCreatedSuccessResponse(UserDto)
+  @ApiForbiddenResponse({ description: '无操作权限!' })
   create(@Body() createUserDto: CreateUserDto) {
     return this.userService.createUser(createUserDto);
   }
@@ -42,7 +44,6 @@ export class UserController {
   async findAll(
     @Query() limit: number,
     @Query() offset: number,
-    @Query() size: number,
   ): Promise<PaginatedDto<UserDto>> {
     return this.userService.findAll() as any;
   }
