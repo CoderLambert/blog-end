@@ -8,6 +8,7 @@ import {
   Delete,
   Query,
   Type,
+  ParseIntPipe,
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { Prisma } from '@prisma/client';
@@ -42,10 +43,10 @@ export class UserController {
   @Get()
   @ApiPaginatedResponse(UserDto)
   async findAll(
-    @Query() limit: number,
-    @Query() offset: number,
+    @Query('limit', ParseIntPipe) limit: number,
+    @Query('offset', ParseIntPipe) offset: number,
   ): Promise<PaginatedDto<UserDto>> {
-    return this.userService.findAll() as any;
+    return this.userService.findAll(limit, offset);
   }
 
   @Get(':id')

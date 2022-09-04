@@ -2,7 +2,7 @@ import { ApiProperty } from '@nestjs/swagger';
 
 export class PaginatedDto<T> {
   @ApiProperty()
-  total: number;
+  counts: number;
 
   @ApiProperty()
   limit: number;
@@ -10,5 +10,5 @@ export class PaginatedDto<T> {
   @ApiProperty()
   offset: number;
 
-  results: T[];
+  items: T[];
 }

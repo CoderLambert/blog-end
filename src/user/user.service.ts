@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { Prisma, User } from '@prisma/client';
 import { CreateUserDto } from './dto/index.dto';
+import any = jasmine.any;
 
 @Injectable()
 export class UserService {
@@ -19,8 +20,18 @@ export class UserService {
     });
   }
 
-  findAll() {
-    return this.prisma.user.findMany({});
+  async findAll(limit: number, offset: number) {
+    const users = await this.prisma.user.findMany({
+      take: limit,
+      skip: offset,
+    });
+    const counts = await this.prisma.user.count();
+    return {
+      limit,
+      offset,
+      counts,
+      items: users,
+    };
   }
 
   findOne(userWhereUniqueInput: Prisma.UserWhereUniqueInput) {
