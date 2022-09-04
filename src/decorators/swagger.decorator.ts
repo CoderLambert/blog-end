@@ -25,11 +25,21 @@ export const ApiPaginatedResponse = <TModel extends Type<any>>(
           { $ref: getSchemaPath(PaginatedDto) },
           {
             properties: {
-              total: {
+              counts: {
                 type: 'number',
+                description: '总数',
+              },
+              limit: {
+                type: 'number',
+                description: '每页数量',
+              },
+              offset: {
+                type: 'number',
+                description: '当前位置',
               },
               items: {
                 type: 'array',
+                description: '当前对象列表集合',
                 items: { $ref: getSchemaPath(model) },
               },
             },
