@@ -8,8 +8,7 @@ import {
   MinLength,
 } from 'class-validator';
 import { User } from '@prisma/client';
-import { PartialType } from '@nestjs/mapped-types';
-import { ApiProperty, PickType } from '@nestjs/swagger';
+import { ApiProperty, OmitType, PickType, PartialType } from '@nestjs/swagger';
 
 // https://nestjs.bootcss.com/openapi/mapped-types
 

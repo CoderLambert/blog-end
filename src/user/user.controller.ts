@@ -4,23 +4,38 @@ import {
   DefaultValuePipe,
   Delete,
   Get,
+  NotFoundException,
+  HttpStatus,
   Param,
   ParseIntPipe,
   Patch,
   Post,
   Query,
+  HttpException,
 } from '@nestjs/common';
 import { UserService } from './user.service';
-import { Prisma } from '@prisma/client';
 import {
   ApiExtraModels,
   ApiForbiddenResponse,
+  ApiNotFoundResponse,
   ApiOperation,
   ApiTags,
 } from '@nestjs/swagger';
 import { PaginatedDto } from '../dtos';
 import { ApiCreatedSuccessResponse, ApiPaginatedResponse } from '../decorators';
-import { CreateUserDto, UserDto } from './dto/index.dto';
+import { CreateUserDto, UpdateUserDto, UserDto } from './dto/index.dto';
+import { Prisma } from '@prisma/client';
+import { constants } from 'http2';
+import { Type } from 'class-transformer';
+
+function catchErrorHandle(error) {
+  if (
+    error instanceof Prisma.PrismaClientKnownRequestError &&
+    error.code === 'P2025'
+  ) {
+    throw new NotFoundException('用户不存在');
+  } else console.error(error);
+}
 
 @ApiTags('用户相关')
 @Controller('users')
@@ -48,25 +63,45 @@ export class UserController {
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.userService.findOne({ id: +id });
+  async findOne(@Param('id', ParseIntPipe) id: number) {
+    const user = await this.userService.findOne({ id });
+    if (user) {
+      return user;
+    } else {
+      throw new NotFoundException('用户不存在');
+    }
   }
 
   @Patch(':id')
-  update(
-    @Param('id') id: string,
-    @Body() updateUserDto: Prisma.UserUpdateInput,
+  async update(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() updateUserDto: UpdateUserDto,
   ) {
-    return this.userService.updateUser({
-      where: { id: +id },
-      data: updateUserDto,
-    });
+    try {
+      const updatedUser = await this.userService.updateUser({
+        where: { id },
+        data: updateUserDto,
+      });
+      return updatedUser;
+    } catch (error) {
+      catchErrorHandle(error);
+    }
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.userService.remove({
-      id: +id,
-    });
+  @ApiNotFoundResponse({
+    description: '操作对象不存在',
+  })
+  @ApiForbiddenResponse({ description: 'Unauthorized Request' })
+  @ApiUnprocessableEntityResponse({ description: 'Bad Request' })
+  async remove(@Param('id') id: string) {
+    try {
+      const deletedUser = await this.userService.remove({
+        id: +id,
+      });
+      return deletedUser;
+    } catch (error) {
+      catchErrorHandle(error);
+    }
   }
 }

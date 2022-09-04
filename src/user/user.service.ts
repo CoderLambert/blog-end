@@ -24,6 +24,9 @@ export class UserService {
     const users = await this.prisma.user.findMany({
       take: limit,
       skip: offset,
+      orderBy: {
+        updatedAt: 'asc',
+      },
     });
     const counts = await this.prisma.user.count();
     return {
