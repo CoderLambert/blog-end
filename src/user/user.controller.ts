@@ -1,14 +1,14 @@
 import {
-  Controller,
-  Get,
-  Post,
   Body,
-  Patch,
-  Param,
+  Controller,
+  DefaultValuePipe,
   Delete,
-  Query,
-  Type,
+  Get,
+  Param,
   ParseIntPipe,
+  Patch,
+  Post,
+  Query,
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { Prisma } from '@prisma/client';
@@ -16,13 +16,11 @@ import {
   ApiExtraModels,
   ApiForbiddenResponse,
   ApiOperation,
-  ApiQuery,
-  ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
 import { PaginatedDto } from '../dtos';
 import { ApiCreatedSuccessResponse, ApiPaginatedResponse } from '../decorators';
-import { UserDto, CreateUserDto } from './dto/index.dto';
+import { CreateUserDto, UserDto } from './dto/index.dto';
 
 @ApiTags('用户相关')
 @Controller('users')
@@ -43,8 +41,8 @@ export class UserController {
   @Get()
   @ApiPaginatedResponse(UserDto)
   async findAll(
-    @Query('limit', ParseIntPipe) limit: number,
-    @Query('offset', ParseIntPipe) offset: number,
+    @Query('limit', new DefaultValuePipe(20), ParseIntPipe) limit: number,
+    @Query('offset', new DefaultValuePipe(0), ParseIntPipe) offset: number,
   ): Promise<PaginatedDto<UserDto>> {
     return this.userService.findAll(limit, offset);
   }
