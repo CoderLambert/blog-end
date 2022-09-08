@@ -20,6 +20,7 @@ import {
   ApiNotFoundResponse,
   ApiOperation,
   ApiTags,
+  ApiUnprocessableEntityResponse,
 } from '@nestjs/swagger';
 import { PaginatedDto } from '../dtos';
 import { ApiCreatedSuccessResponse, ApiPaginatedResponse } from '../decorators';
@@ -94,10 +95,10 @@ export class UserController {
   })
   @ApiForbiddenResponse({ description: 'Unauthorized Request' })
   @ApiUnprocessableEntityResponse({ description: 'Bad Request' })
-  async remove(@Param('id') id: string) {
+  async remove(@Param('id', ParseIntPipe) id: number) {
     try {
       const deletedUser = await this.userService.remove({
-        id: +id,
+        id,
       });
       return deletedUser;
     } catch (error) {
