@@ -17,6 +17,7 @@ import { UserService } from './user.service';
 import {
   ApiExtraModels,
   ApiForbiddenResponse,
+  ApiInternalServerErrorResponse,
   ApiNotFoundResponse,
   ApiOperation,
   ApiTags,
@@ -41,6 +42,11 @@ function catchErrorHandle(error) {
 @ApiTags('用户相关')
 @Controller('users')
 @ApiExtraModels(PaginatedDto)
+@ApiForbiddenResponse({ description: '无操作权限' })
+@ApiInternalServerErrorResponse()
+@ApiNotFoundResponse({
+  description: '操作对象不存在',
+})
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
@@ -49,7 +55,6 @@ export class UserController {
     summary: '创建用户',
   })
   @ApiCreatedSuccessResponse(UserDto)
-  @ApiForbiddenResponse({ description: '无操作权限!' })
   create(@Body() createUserDto: CreateUserDto) {
     return this.userService.createUser(createUserDto);
   }
@@ -79,28 +84,21 @@ export class UserController {
     @Body() updateUserDto: UpdateUserDto,
   ) {
     try {
-      const updatedUser = await this.userService.updateUser({
+      return await this.userService.updateUser({
         where: { id },
         data: updateUserDto,
       });
-      return updatedUser;
     } catch (error) {
       catchErrorHandle(error);
     }
   }
 
   @Delete(':id')
-  @ApiNotFoundResponse({
-    description: '操作对象不存在',
-  })
-  @ApiForbiddenResponse({ description: 'Unauthorized Request' })
-  @ApiUnprocessableEntityResponse({ description: 'Bad Request' })
   async remove(@Param('id', ParseIntPipe) id: number) {
     try {
-      const deletedUser = await this.userService.remove({
+      return await this.userService.remove({
         id,
       });
-      return deletedUser;
     } catch (error) {
       catchErrorHandle(error);
     }
