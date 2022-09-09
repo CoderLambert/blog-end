@@ -1,7 +1,6 @@
 import { applyDecorators, Type } from '@nestjs/common';
 import { ApiOkResponse, ApiQuery, getSchemaPath } from '@nestjs/swagger';
 import { PaginatedDto } from '../dtos';
-import any = jasmine.any;
 import { ApiCreatedResponse } from '@nestjs/swagger/dist/decorators/api-response.decorator';
 
 export const ApiCreatedSuccessResponse = <TModel extends Type<any>>(

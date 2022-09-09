@@ -5,30 +5,26 @@ import {
   Delete,
   Get,
   NotFoundException,
-  HttpStatus,
   Param,
   ParseIntPipe,
   Patch,
   Post,
   Query,
-  HttpException,
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import {
+  ApiBadRequestResponse,
   ApiExtraModels,
   ApiForbiddenResponse,
   ApiInternalServerErrorResponse,
   ApiNotFoundResponse,
   ApiOperation,
   ApiTags,
-  ApiUnprocessableEntityResponse,
 } from '@nestjs/swagger';
 import { PaginatedDto } from '../dtos';
 import { ApiCreatedSuccessResponse, ApiPaginatedResponse } from '../decorators';
 import { CreateUserDto, UpdateUserDto, UserDto } from './dto/index.dto';
 import { Prisma } from '@prisma/client';
-import { constants } from 'http2';
-import { Type } from 'class-transformer';
 
 function catchErrorHandle(error) {
   if (
@@ -46,6 +42,9 @@ function catchErrorHandle(error) {
 @ApiInternalServerErrorResponse()
 @ApiNotFoundResponse({
   description: '操作对象不存在',
+})
+@ApiBadRequestResponse({
+  description: '客户端请求错误',
 })
 export class UserController {
   constructor(private readonly userService: UserService) {}
