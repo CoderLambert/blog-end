@@ -10,6 +10,8 @@ import {
   Patch,
   Post,
   Query,
+  Catch,
+  UseFilters,
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import {
@@ -36,7 +38,6 @@ function catchErrorHandle(error) {
 }
 
 @ApiTags('用户相关')
-@Controller('users')
 @ApiExtraModels(PaginatedDto)
 @ApiForbiddenResponse({ description: '无操作权限' })
 @ApiInternalServerErrorResponse()
@@ -46,6 +47,7 @@ function catchErrorHandle(error) {
 @ApiBadRequestResponse({
   description: '客户端请求错误',
 })
+@Controller('users')
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
