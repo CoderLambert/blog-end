@@ -28,7 +28,7 @@ export class UserDto implements User {
     example: 'l156486648@163.com',
     description: '用户邮箱',
   })
-  @IsEmail({
+  @IsEmail(undefined, {
     message: '邮箱格式不正确',
   })
   @IsNotEmpty({
@@ -42,8 +42,12 @@ export class UserDto implements User {
   })
   @IsString()
   @IsNotEmpty()
-  @MinLength(8)
-  @MaxLength(20)
+  @MinLength(8, {
+    message: '密码长度必须大于等于8',
+  })
+  @MaxLength(20, {
+    message: '密码长度必须小于等于20',
+  })
   password: string;
 
   @IsDateString()
