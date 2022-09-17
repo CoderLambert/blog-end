@@ -16,5 +16,6 @@ async function bootstrap() {
   app.use(helmet());
 
   await app.listen(3000);
+  console.log(await app.getUrl());
 }
 bootstrap();

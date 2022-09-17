@@ -62,4 +62,12 @@ export class CreateUserDto extends PickType(UserDto, [
   'password',
 ] as const) {}
 
+export class UserInfoDto extends PickType(UserDto, [
+  'name',
+  'email',
+  'updatedAt',
+  'createdAt',
+  'lastLoginAt',
+] as const) {}
+
 export class UpdateUserDto extends PartialType(CreateUserDto) {}

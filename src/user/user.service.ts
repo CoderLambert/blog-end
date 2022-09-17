@@ -1,23 +1,30 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, ConflictException } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { Prisma, User } from '@prisma/client';
 import { CreateUserDto } from './dto/index.dto';
-import any = jasmine.any;
+import * as bcrypt from 'bcrypt';
+import { AUTH_CONFIG } from '../conifg';
 
 @Injectable()
 export class UserService {
   constructor(private prisma: PrismaService) {}
 
-  async createUser(data: CreateUserDto): Promise<User> {
-    return this.prisma.user.create({
-      data: {
-        name: data.name,
-        email: data.email,
-      },
-      include: {
-        articles: true,
-      },
-    });
+  async createUser(data: CreateUserDto): Promise<void> {
+    const hashPassword = await bcrypt.hash(
+      data.password,
+      AUTH_CONFIG.saltRounds,
+    );
+    try {
+      await this.prisma.user.create({
+        data: {
+          ...data,
+          password: hashPassword,
+        },
+        select: null,
+      });
+    } catch (e) {
+      throw e;
+    }
   }
 
   async findAll(limit: number, offset: number) {
@@ -26,6 +33,13 @@ export class UserService {
       skip: offset,
       orderBy: {
         updatedAt: 'asc',
+      },
+      select: {
+        name: true,
+        email: true,
+        lastLoginAt: true,
+        createdAt: true,
+        updatedAt: true,
       },
     });
     const counts = await this.prisma.user.count();
@@ -58,5 +72,9 @@ export class UserService {
     return this.prisma.user.delete({
       where,
     });
+  }
+
+  removeAll() {
+    return this.prisma.user.deleteMany();
   }
 }
