@@ -1,4 +1,4 @@
-import { Injectable, ConflictException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { Prisma, User } from '@prisma/client';
 import { CreateUserDto } from './dto/index.dto';
@@ -35,6 +35,7 @@ export class UserService {
         updatedAt: 'asc',
       },
       select: {
+        id: true,
         name: true,
         email: true,
         lastLoginAt: true,

@@ -3,14 +3,17 @@ import { AuthService } from './auth.service';
 import { CreateUserDto } from '../user/dto/index.dto';
 import {
   ApiBadRequestResponse,
+  ApiExtraModels,
   ApiForbiddenResponse,
   ApiInternalServerErrorResponse,
   ApiNotFoundResponse,
   ApiOperation,
   ApiTags,
 } from '@nestjs/swagger';
+import { PaginatedDto } from '../dtos';
 
 @ApiTags('用户验证相关')
+@ApiExtraModels(PaginatedDto)
 @ApiForbiddenResponse({ description: '无操作权限' })
 @ApiInternalServerErrorResponse()
 @ApiNotFoundResponse({
@@ -28,10 +31,6 @@ export class AuthController {
     summary: '创建用户',
   })
   async register(@Body() userInfo: CreateUserDto) {
-    try {
-      await this.authService.createUser(userInfo);
-    } catch (e) {
-      throw e;
-    }
+    await this.authService.createUser(userInfo);
   }
 }
