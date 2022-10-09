@@ -10,10 +10,6 @@ import {
   Patch,
   Post,
   Query,
-  Catch,
-  UseFilters,
-  HttpCode,
-  ConflictException,
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import {
@@ -22,18 +18,18 @@ import {
   ApiForbiddenResponse,
   ApiInternalServerErrorResponse,
   ApiNotFoundResponse,
+  ApiOkResponse,
   ApiOperation,
   ApiTags,
 } from '@nestjs/swagger';
 import { PaginatedDto } from '../dtos';
-import { ApiCreatedSuccessResponse, ApiPaginatedResponse } from '../decorators';
+import { ApiPaginatedResponse } from '../decorators';
 import {
   CreateUserDto,
   UpdateUserDto,
   UserDto,
   UserInfoDto,
 } from './dto/index.dto';
-import { Prisma } from '@prisma/client';
 
 @ApiTags('用户相关')
 @ApiExtraModels(PaginatedDto)
@@ -53,7 +49,11 @@ export class UserController {
   @ApiOperation({
     summary: '创建用户',
   })
-  async create(@Body() createUserDto: CreateUserDto): Promise<void> {
+  @ApiOkResponse({
+    description: '创建成功返回用户对象',
+    type: UserInfoDto,
+  })
+  async create(@Body() createUserDto: CreateUserDto): Promise<UserInfoDto> {
     return await this.userService.createUser(createUserDto);
   }
 
