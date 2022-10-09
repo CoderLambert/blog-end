@@ -13,6 +13,7 @@ import { AuthService } from './auth.service';
 import { CreateUserDto, LoginUserDto } from '../user/dto/index.dto';
 import {
   ApiBadRequestResponse,
+  ApiBearerAuth,
   ApiBody,
   ApiExtraModels,
   ApiForbiddenResponse,
@@ -22,6 +23,7 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 import { PaginatedDto } from '../dtos';
+import { UserService } from '../user/user.service';
 
 @ApiTags('用户验证相关')
 @ApiExtraModels(PaginatedDto)
@@ -35,7 +37,10 @@ import { PaginatedDto } from '../dtos';
 })
 @Controller('auth')
 export class AuthController {
-  constructor(private readonly authService: AuthService) {}
+  constructor(
+    private readonly authService: AuthService,
+    private readonly userService: UserService,
+  ) {}
 
   @Post('register')
   @ApiOperation({
@@ -51,13 +56,17 @@ export class AuthController {
     summary: '用户登录',
   })
   @ApiBody({ description: '用户登录', type: LoginUserDto })
-  login(@Request() req): any {
+  async login(@Request() req) {
     // 返回 jwt token
-    return this.authService.login(req.user);
+    const token = await this.authService.login(req.user);
+    console.log(token);
+    return token;
   }
 
+  @UseGuards(AuthGuard('jwt'))
+  @ApiBearerAuth()
   @Get('profile/:id')
   async profile(@Param('id') id: number) {
-    return id;
+    return await this.userService.findOne({ id: +id });
   }
 }

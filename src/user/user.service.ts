@@ -52,6 +52,15 @@ export class UserService {
     };
   }
 
+  async isUserExist(userInfo: Partial<User>): Promise<boolean> {
+    const user = this.prisma.user.findUnique({
+      where: {
+        id: userInfo.id,
+      },
+    });
+    return !!user;
+  }
+
   findOne(userWhereUniqueInput: Prisma.UserWhereUniqueInput) {
     return this.prisma.user.findUnique({
       where: userWhereUniqueInput,

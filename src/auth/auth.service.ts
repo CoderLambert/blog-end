@@ -5,11 +5,13 @@ import { CreateUserDto } from '../user/dto/index.dto';
 import * as bcrypt from 'bcrypt';
 import { AUTH_CONFIG } from '../conifg';
 import { PrismaService } from '../prisma/prisma.service';
+import { JwtService } from '@nestjs/jwt';
 
 @Injectable()
 export class AuthService {
   constructor(
     private prisma: PrismaService,
+    private jwtService: JwtService,
     private usersService: UserService,
   ) {}
 
@@ -33,7 +35,20 @@ export class AuthService {
 
   async login(data: UserDto): Promise<any> {
     const { password, createdAt, updatedAt, lastLoginAt, ...restUser } = data;
-    return restUser;
+    // 注意此处需要在 auth module
+    // 注册 secret， signOptions, 否则无法生成token
+    // JwtModule.register({
+    //   secret: JWT_CONFIG.secretKey,
+    //   signOptions: { expiresIn: `${JWT_CONFIG.expiresIn}m` },
+    // }),
+    const payload = { email: data.email, sub: data.id };
+
+    const token = this.jwtService.sign(payload);
+
+    return {
+      token,
+      user: restUser,
+    };
   }
 
   async validateUser(data: LoginUserDto): Promise<any> {
