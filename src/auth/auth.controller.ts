@@ -30,6 +30,7 @@ import {
 } from '@nestjs/swagger';
 import { PaginatedDto } from '../dtos';
 import { UserService } from '../user/user.service';
+import { SkipJwtAuth } from './constants';
 
 @ApiTags('用户验证相关')
 @ApiExtraModels(PaginatedDto)
@@ -73,8 +74,9 @@ export class AuthController {
     return token;
   }
 
+  @SkipJwtAuth()
   @UseGuards(AuthGuard('jwt'))
-  @ApiBearerAuth()
+  // @ApiBearerAuth()
   @Get('profile/:id')
   async profile(@Param('id') id: number) {
     return await this.userService.findOne({ id: +id });
