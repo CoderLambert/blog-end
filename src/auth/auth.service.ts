@@ -1,5 +1,5 @@
 import { UserService } from './../user/user.service';
-import { LoginUserDto, UserDto } from './../user/dto/index.dto';
+import { LoginUserDto, UserDto, UserInfoDto } from './../user/dto/index.dto';
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateUserDto } from '../user/dto/index.dto';
 import * as bcrypt from 'bcrypt';
@@ -15,22 +15,8 @@ export class AuthService {
     private usersService: UserService,
   ) {}
 
-  async createUser(data: CreateUserDto): Promise<void> {
-    const hashPassword = await bcrypt.hash(
-      data.password,
-      AUTH_CONFIG.saltRounds,
-    );
-    try {
-      await this.prisma.user.create({
-        data: {
-          ...data,
-          password: hashPassword,
-        },
-        select: null,
-      });
-    } catch (e) {
-      throw e;
-    }
+  async createUser(data: CreateUserDto): Promise<UserInfoDto> {
+    return await this.usersService.createUser(data);
   }
 
   async login(data: UserDto): Promise<any> {

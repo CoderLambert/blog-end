@@ -8,7 +8,7 @@ import {
   MinLength,
 } from 'class-validator';
 import { User } from '@prisma/client';
-import { ApiProperty, OmitType, PickType, PartialType } from '@nestjs/swagger';
+import { ApiProperty, PartialType, PickType } from '@nestjs/swagger';
 
 // https://nestjs.bootcss.com/openapi/mapped-types
 export class LoginUserDto {
@@ -83,10 +83,6 @@ export class UserDto implements User {
   lastLoginAt: Date;
 }
 
-// export class LoginUserDto extends PickType(UserDto, [
-//   'email',
-//   'password',
-// ] as const) {}
 export class CreateUserDto extends PickType(UserDto, [
   'name',
   'email',
@@ -94,6 +90,7 @@ export class CreateUserDto extends PickType(UserDto, [
 ] as const) {}
 
 export class UserInfoDto extends PickType(UserDto, [
+  'id',
   'name',
   'email',
   'updatedAt',

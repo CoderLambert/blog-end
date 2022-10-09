@@ -10,7 +10,12 @@ import {
   Request,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
-import { CreateUserDto, LoginUserDto } from '../user/dto/index.dto';
+import {
+  CreateUserDto,
+  LoginUserDto,
+  UserDto,
+  UserInfoDto,
+} from '../user/dto/index.dto';
 import {
   ApiBadRequestResponse,
   ApiBearerAuth,
@@ -19,6 +24,7 @@ import {
   ApiForbiddenResponse,
   ApiInternalServerErrorResponse,
   ApiNotFoundResponse,
+  ApiOkResponse,
   ApiOperation,
   ApiTags,
 } from '@nestjs/swagger';
@@ -46,8 +52,12 @@ export class AuthController {
   @ApiOperation({
     summary: '创建用户',
   })
+  @ApiOkResponse({
+    description: '创建成功返回用户对象',
+    type: UserInfoDto,
+  })
   async register(@Body() userInfo: CreateUserDto) {
-    await this.authService.createUser(userInfo);
+    return await this.authService.createUser(userInfo);
   }
 
   @UseGuards(LocalAuthGuard)
