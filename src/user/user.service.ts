@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { Prisma, User } from '@prisma/client';
-import { CreateUserDto } from './dto/index.dto';
+import { CreateUserDto, LoginUserDto } from './dto/index.dto';
 import * as bcrypt from 'bcrypt';
 import { AUTH_CONFIG } from '../conifg';
 
@@ -59,6 +59,17 @@ export class UserService {
       },
     });
     return !!user;
+  }
+
+  async findByEmailOrName(userInfo: LoginUserDto) {
+    return (
+      (await this.findOne({
+        email: userInfo.username,
+      })) ||
+      (await this.findOne({
+        name: userInfo.username,
+      }))
+    );
   }
 
   findOne(userWhereUniqueInput: Prisma.UserWhereUniqueInput) {

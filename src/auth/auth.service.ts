@@ -48,14 +48,7 @@ export class AuthService {
   }
 
   async validateUser(data: LoginUserDto): Promise<any> {
-    const user =
-      (await this.usersService.findOne({
-        email: data.username,
-      })) ||
-      (await this.usersService.findOne({
-        name: data.username,
-      }));
-
+    const user = await this.usersService.findByEmailOrName(data);
     if (user === null) {
       throw new NotFoundException({ message: '用户名不存在' });
     }
