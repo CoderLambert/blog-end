@@ -35,21 +35,6 @@ import {
 } from './dto/index.dto';
 import { Prisma } from '@prisma/client';
 
-function catchErrorHandle(error) {
-  if (error.code === 'P2002') {
-    throw new ConflictException('当前用户邮箱已注册');
-  }
-
-  if (
-    error instanceof Prisma.PrismaClientKnownRequestError &&
-    error.code === 'P2025'
-  ) {
-    throw new NotFoundException('用户不存在');
-  } else {
-    throw error;
-  }
-}
-
 @ApiTags('用户相关')
 @ApiExtraModels(PaginatedDto)
 @ApiForbiddenResponse({ description: '无操作权限' })
@@ -69,11 +54,7 @@ export class UserController {
     summary: '创建用户',
   })
   async create(@Body() createUserDto: CreateUserDto): Promise<void> {
-    try {
-      return await this.userService.createUser(createUserDto);
-    } catch (e) {
-      catchErrorHandle(e);
-    }
+    return await this.userService.createUser(createUserDto);
   }
 
   @Get()
@@ -103,14 +84,10 @@ export class UserController {
     @Param('id', ParseIntPipe) id: number,
     @Body() updateUserDto: UpdateUserDto,
   ) {
-    try {
-      return await this.userService.updateUser({
-        where: { id },
-        data: updateUserDto,
-      });
-    } catch (error) {
-      catchErrorHandle(error);
-    }
+    return await this.userService.updateUser({
+      where: { id },
+      data: updateUserDto,
+    });
   }
 
   @Delete(':id')
@@ -118,22 +95,14 @@ export class UserController {
     summary: '删除所有用户',
   })
   async remove(@Param('id', ParseIntPipe) id: number) {
-    try {
-      return await this.userService.remove({
-        id,
-      });
-    } catch (error) {
-      catchErrorHandle(error);
-    }
+    return await this.userService.remove({
+      id,
+    });
   }
 
   @Delete('/')
   async removeAll() {
-    try {
-      const res = await this.userService.removeAll();
-      return [];
-    } catch (error) {
-      catchErrorHandle(error);
-    }
+    await this.userService.removeAll();
+    return [];
   }
 }

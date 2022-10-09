@@ -60,6 +60,10 @@ export class UserDto implements User {
   lastLoginAt: Date;
 }
 
+export class LoginUserDto extends PickType(UserDto, [
+  'email',
+  'password',
+] as const) {}
 export class CreateUserDto extends PickType(UserDto, [
   'name',
   'email',
