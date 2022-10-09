@@ -1,9 +1,19 @@
-import { AuthGuard } from './auth.guard';
-import { Body,Param,Query, Controller,Get, Post, UseGuards } from '@nestjs/common';
+import { LocalAuthGuard } from './guards/local-auth.guard';
+import { AuthGuard } from '@nestjs/passport';
+import {
+  Body,
+  Param,
+  Controller,
+  Get,
+  Post,
+  UseGuards,
+  Request,
+} from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { CreateUserDto, LoginUserDto } from '../user/dto/index.dto';
 import {
   ApiBadRequestResponse,
+  ApiBody,
   ApiExtraModels,
   ApiForbiddenResponse,
   ApiInternalServerErrorResponse,
@@ -12,7 +22,6 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 import { PaginatedDto } from '../dtos';
-
 
 @ApiTags('用户验证相关')
 @ApiExtraModels(PaginatedDto)
@@ -36,16 +45,19 @@ export class AuthController {
     await this.authService.createUser(userInfo);
   }
 
+  @UseGuards(LocalAuthGuard)
   @Post('login')
   @ApiOperation({
     summary: '用户登录',
   })
-  async login(@Body() userInfo: LoginUserDto) {
-    return await this.authService.login(userInfo);
+  @ApiBody({ description: '用户登录', type: LoginUserDto })
+  login(@Request() req): any {
+    // 返回 jwt token
+    return this.authService.login(req.user);
   }
-  @UseGuards(new AuthGuard())
+
   @Get('profile/:id')
-  async profile(@Param('id') id: number) { 
-    return id
+  async profile(@Param('id') id: number) {
+    return id;
   }
 }
