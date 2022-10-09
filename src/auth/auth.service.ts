@@ -37,10 +37,6 @@ export class AuthService {
     const { password, createdAt, updatedAt, lastLoginAt, ...restUser } = data;
     // 注意此处需要在 auth module
     // 注册 secret， signOptions, 否则无法生成token
-    // JwtModule.register({
-    //   secret: JWT_CONFIG.secretKey,
-    //   signOptions: { expiresIn: `${JWT_CONFIG.expiresIn}m` },
-    // }),
     const payload = { email: data.email, sub: data.id };
 
     const token = this.jwtService.sign(payload);
@@ -53,27 +49,17 @@ export class AuthService {
 
   async validateUser(data: LoginUserDto): Promise<any> {
     const user =
-      (await this.prisma.user.findUnique({
-        where: {
-          email: data.username,
-        },
+      (await this.usersService.findOne({
+        email: data.username,
       })) ||
-      (await this.prisma.user.findUnique({
-        where: {
-          name: data.username,
-        },
+      (await this.usersService.findOne({
+        name: data.username,
       }));
 
     if (user === null) {
       throw new NotFoundException({ message: '用户名不存在' });
     }
-
     const checkPassword = bcrypt.compareSync(data.password, user.password);
-
-    if (checkPassword) {
-      return user;
-    } else {
-      return null;
-    }
+    return checkPassword ? user : null;
   }
 }
