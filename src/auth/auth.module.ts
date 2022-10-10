@@ -19,7 +19,7 @@ import { JWT_CONFIG } from '../config/jwt';
     PassportModule,
     JwtModule.register({
       secret: JWT_CONFIG.secretKey,
-      signOptions: { expiresIn: `${JWT_CONFIG.expiresIn}m` },
+      signOptions: { expiresIn: `${JWT_CONFIG.expiresIn}` },
     }),
   ],
   providers: [AuthService, UserService, LocalStrategy, JwtStrategy],
