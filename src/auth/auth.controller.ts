@@ -18,7 +18,6 @@ import {
 } from '../user/dto/index.dto';
 import {
   ApiBadRequestResponse,
-  ApiBearerAuth,
   ApiBody,
   ApiExtraModels,
   ApiForbiddenResponse,
@@ -31,6 +30,7 @@ import {
 import { PaginatedDto } from '../dtos';
 import { UserService } from '../user/user.service';
 import { SkipJwtAuth } from './constants';
+import { JwtAuthGuard } from './guards/jwt.guard';
 
 @ApiTags('用户验证相关')
 @ApiExtraModels(PaginatedDto)
@@ -61,6 +61,7 @@ export class AuthController {
     return await this.authService.createUser(userInfo);
   }
 
+  @SkipJwtAuth()
   @UseGuards(LocalAuthGuard)
   @Post('login')
   @ApiOperation({
@@ -74,8 +75,7 @@ export class AuthController {
     return token;
   }
 
-  @SkipJwtAuth()
-  @UseGuards(AuthGuard('jwt'))
+  @UseGuards(JwtAuthGuard)
   // @ApiBearerAuth()
   @Get('profile/:id')
   async profile(@Param('id') id: number) {
