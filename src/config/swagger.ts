@@ -1,6 +1,5 @@
 import { INestApplication } from '@nestjs/common';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
-import { PaginatedDto } from 'src/dtos';
 import { UserDto } from 'src/user/dto/index.dto';
 import { SITE_CONFIG } from './site';
 

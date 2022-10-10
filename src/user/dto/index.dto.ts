@@ -106,6 +106,7 @@ export class UserInfoDto extends PickType(UserDto, [
   'updatedAt',
   'createdAt',
   'lastLoginAt',
+  'role',
 ] as const) { }
 
 export class UpdateUserDto extends PartialType(CreateUserDto) { }

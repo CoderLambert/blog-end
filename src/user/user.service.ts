@@ -30,6 +30,7 @@ export class UserService implements OnModuleInit {
           lastLoginAt: true,
           createdAt: true,
           updatedAt: true,
+          role: true
         },
       });
       return user;

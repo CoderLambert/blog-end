@@ -65,8 +65,8 @@ export class UserController {
   async findAll(
     @Query('limit', new DefaultValuePipe(20), ParseIntPipe) limit: number,
     @Query('offset', new DefaultValuePipe(0), ParseIntPipe) offset: number,
-  ): Promise<PaginatedDto<UserDto>> {
-    return (await this.userService.findAll(limit, offset)) as any;
+  ): Promise<PaginatedDto<UserInfoDto>> {
+    return (await this.userService.findAll(limit, offset));
   }
 
   @Get(':id')
