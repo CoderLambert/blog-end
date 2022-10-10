@@ -30,6 +30,7 @@ import {
   UserDto,
   UserInfoDto,
 } from './dto/index.dto';
+import { SkipJwtAuth } from '../auth/constants';
 
 @ApiTags('用户相关')
 @ApiExtraModels(PaginatedDto)
@@ -58,6 +59,7 @@ export class UserController {
   }
 
   @Get()
+  @SkipJwtAuth()
   @ApiOperation({
     summary: '返回所有用户',
   })
@@ -70,6 +72,7 @@ export class UserController {
   }
 
   @Get(':id')
+  @SkipJwtAuth()
   async findOne(@Param('id', ParseIntPipe) id: number) {
     const user = await this.userService.findOne({ id });
     if (user) {

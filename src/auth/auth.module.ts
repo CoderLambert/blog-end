@@ -16,7 +16,9 @@ import { JWT_CONFIG } from '../config/jwt';
   imports: [
     PrismaModule,
     UserModule,
-    PassportModule,
+    //  确定默认密码策略
+    //  http://doc.25years.xyz/#/nestjs/security?id=%e8%ae%a4%e8%af%81%ef%bc%88authentication%ef%bc%89
+    PassportModule.register({ defaultStrategy: 'jwt' }),
     JwtModule.register({
       secret: JWT_CONFIG.secretKey,
       signOptions: { expiresIn: `${JWT_CONFIG.expiresIn}` },
