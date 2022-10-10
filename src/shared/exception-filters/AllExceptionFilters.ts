@@ -24,6 +24,9 @@ export class AllExceptionsFilter implements ExceptionFilter {
       exception instanceof HttpException
         ? exception.getStatus()
         : HttpStatus.INTERNAL_SERVER_ERROR;
+
+    console.log(JSON.stringify(exception));
+
     if (exception instanceof Prisma.PrismaClientKnownRequestError) {
       let responseBody = {
         statusCode: status,
