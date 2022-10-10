@@ -4,10 +4,11 @@ import {
   IsNotEmpty,
   IsNumberString,
   IsString,
+  IsEnum,
   MaxLength,
   MinLength,
 } from 'class-validator';
-import { User } from '@prisma/client';
+import { User, UserRole } from '@prisma/client';
 import { ApiProperty, PartialType, PickType } from '@nestjs/swagger';
 
 // https://nestjs.bootcss.com/openapi/mapped-types
@@ -35,6 +36,7 @@ export class LoginUserDto {
   })
   password: string;
 }
+
 export class UserDto implements User {
   @IsNumberString()
   id: number;
@@ -81,13 +83,16 @@ export class UserDto implements User {
 
   @IsDateString()
   lastLoginAt: Date;
+
+  @IsEnum(UserRole)
+  role: UserRole;
 }
 
 export class CreateUserDto extends PickType(UserDto, [
   'name',
   'email',
   'password',
-] as const) {}
+] as const) { }
 
 export class UserInfoDto extends PickType(UserDto, [
   'id',
@@ -96,6 +101,6 @@ export class UserInfoDto extends PickType(UserDto, [
   'updatedAt',
   'createdAt',
   'lastLoginAt',
-] as const) {}
+] as const) { }
 
-export class UpdateUserDto extends PartialType(CreateUserDto) {}
+export class UpdateUserDto extends PartialType(CreateUserDto) { }

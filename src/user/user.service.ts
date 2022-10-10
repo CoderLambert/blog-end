@@ -7,7 +7,7 @@ import { AUTH_CONFIG } from '../conifg';
 
 @Injectable()
 export class UserService implements OnModuleInit {
-  constructor(private prisma: PrismaService) {}
+  constructor(private prisma: PrismaService) { }
   onModuleInit(): any {
     console.log('user service onModuleInit');
   }
@@ -52,6 +52,7 @@ export class UserService implements OnModuleInit {
         lastLoginAt: true,
         createdAt: true,
         updatedAt: true,
+        role: true,
       },
     });
     const counts = await this.prisma.user.count();

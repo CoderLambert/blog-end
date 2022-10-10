@@ -15,6 +15,7 @@ model User {
   updatedAt   DateTime  @updatedAt
   lastLoginAt DateTime  @default(now()) @updatedAt
   password    String    @default("")
+  role        UserRole  @default(USER)
   articles    Article[]
 }
 
@@ -39,4 +40,9 @@ model ArticleTag {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   article   Article? @relation(fields: [articleId], references: [id])
+}
+
+enum UserRole {
+  USER
+  ADMIN
 }
