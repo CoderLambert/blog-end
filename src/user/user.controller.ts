@@ -14,7 +14,6 @@ import {
 import { UserService } from './user.service';
 import {
   ApiBadRequestResponse,
-  ApiExtraModels,
   ApiForbiddenResponse,
   ApiInternalServerErrorResponse,
   ApiNotFoundResponse,
@@ -33,7 +32,6 @@ import {
 import { SkipJwtAuth } from '../auth/constants';
 
 @ApiTags('用户相关')
-@ApiExtraModels(PaginatedDto)
 @ApiForbiddenResponse({ description: '无操作权限' })
 @ApiInternalServerErrorResponse()
 @ApiNotFoundResponse({

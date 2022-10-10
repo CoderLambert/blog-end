@@ -21,7 +21,6 @@ import {
   ApiBadRequestResponse,
   ApiBearerAuth,
   ApiBody,
-  ApiExtraModels,
   ApiForbiddenResponse,
   ApiInternalServerErrorResponse,
   ApiNotFoundResponse,
@@ -29,13 +28,10 @@ import {
   ApiOperation,
   ApiTags,
 } from '@nestjs/swagger';
-import { PaginatedDto } from '../dtos';
 import { UserService } from '../user/user.service';
 import { SkipJwtAuth } from './constants';
-import { JwtAuthGuard } from './guards/jwt.guard';
 
 @ApiTags('用户验证相关')
-@ApiExtraModels(PaginatedDto)
 @ApiForbiddenResponse({ description: '无操作权限' })
 @ApiInternalServerErrorResponse()
 @ApiNotFoundResponse({
@@ -49,7 +45,7 @@ export class AuthController {
   constructor(
     private readonly authService: AuthService,
     private readonly userService: UserService,
-  ) {}
+  ) { }
 
   @Post('register')
   @ApiOperation({
