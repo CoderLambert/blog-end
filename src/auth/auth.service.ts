@@ -3,7 +3,7 @@ import { LoginUserDto, UserDto, UserInfoDto } from './../user/dto/index.dto';
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateUserDto } from '../user/dto/index.dto';
 import * as bcrypt from 'bcrypt';
-import { AUTH_CONFIG } from '../conifg';
+import { AUTH_CONFIG } from '../config';
 import { PrismaService } from '../prisma/prisma.service';
 import { JwtService } from '@nestjs/jwt';
 

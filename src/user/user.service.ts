@@ -3,7 +3,7 @@ import { PrismaService } from '../prisma/prisma.service';
 import { Prisma, User } from '@prisma/client';
 import { CreateUserDto, LoginUserDto, UserInfoDto } from './dto/index.dto';
 import * as bcrypt from 'bcrypt';
-import { AUTH_CONFIG } from '../conifg';
+import { AUTH_CONFIG } from '../config';
 
 @Injectable()
 export class UserService implements OnModuleInit {

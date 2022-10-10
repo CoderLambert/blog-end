@@ -3,7 +3,7 @@ import helmet from 'helmet';
 import { ValidationPipe } from './shared/pipes/validation.pipe';
 import { HttpAdapterHost, NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
-import { swaggerInit } from './conifg';
+import { swaggerInit } from './config';
 import { AllExceptionsFilter } from './shared/exception-filters';
 
 async function bootstrap() {

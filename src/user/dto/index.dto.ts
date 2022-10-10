@@ -83,7 +83,11 @@ export class UserDto implements User {
 
   @IsDateString()
   lastLoginAt: Date;
-
+  @ApiProperty({
+    enumName: 'UserRole',
+    enum: UserRole,
+    description: '用户角色',
+  })
   @IsEnum(UserRole)
   role: UserRole;
 }
@@ -92,6 +96,7 @@ export class CreateUserDto extends PickType(UserDto, [
   'name',
   'email',
   'password',
+  'role'
 ] as const) { }
 
 export class UserInfoDto extends PickType(UserDto, [
