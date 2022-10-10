@@ -63,6 +63,7 @@ export class AuthController {
     return await this.authService.createUser(userInfo);
   }
 
+  @SkipJwtAuth()
   @UseGuards(LocalAuthGuard)
   @Post('login')
   @ApiOperation({
@@ -75,7 +76,6 @@ export class AuthController {
     return token;
   }
 
-  @UseGuards(JwtAuthGuard)
   // 添加 token 请求头
   @ApiBearerAuth()
   @Get('profile/:id')

@@ -11,6 +11,7 @@ import { ArticlesService } from './articles.service';
 import { CreateArticleDto } from './dto/create-article.dto';
 import { UpdateArticleDto } from './dto/update-article.dto';
 import { ApiTags } from '@nestjs/swagger';
+import { SkipJwtAuth } from '../auth/constants';
 
 @ApiTags('文章相关')
 @Controller('articles')
@@ -23,11 +24,13 @@ export class ArticlesController {
   }
 
   @Get()
+  @SkipJwtAuth()
   findAll() {
     return this.articlesService.findAll();
   }
 
   @Get(':id')
+  @SkipJwtAuth()
   findOne(@Param('id') id: string) {
     return this.articlesService.findOne(+id);
   }
