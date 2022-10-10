@@ -13,7 +13,7 @@ import { ApiProperty, PartialType, PickType } from '@nestjs/swagger';
 // https://nestjs.bootcss.com/openapi/mapped-types
 export class LoginUserDto {
   @ApiProperty({
-    example: 'l156486648@163.com, lambert',
+    example: 'lambert',
     description: '用户名或者用户邮箱',
   })
   @IsNotEmpty({

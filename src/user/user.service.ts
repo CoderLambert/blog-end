@@ -1,18 +1,16 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, OnModuleInit } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { Prisma, User } from '@prisma/client';
-import {
-  CreateUserDto,
-  LoginUserDto,
-  UserDto,
-  UserInfoDto,
-} from './dto/index.dto';
+import { CreateUserDto, LoginUserDto, UserInfoDto } from './dto/index.dto';
 import * as bcrypt from 'bcrypt';
 import { AUTH_CONFIG } from '../conifg';
 
 @Injectable()
-export class UserService {
+export class UserService implements OnModuleInit {
   constructor(private prisma: PrismaService) {}
+  onModuleInit(): any {
+    console.log('user service onModuleInit');
+  }
 
   async createUser(data: CreateUserDto): Promise<UserInfoDto> {
     const hashPassword = await bcrypt.hash(

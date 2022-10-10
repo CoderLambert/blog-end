@@ -23,7 +23,7 @@ export class AuthService {
     const { password, createdAt, updatedAt, lastLoginAt, ...restUser } = data;
     // 注意此处需要在 auth module
     // 注册 secret， signOptions, 否则无法生成token
-    const payload = { email: data.email, sub: data.id };
+    const payload = { username: data.name, sub: data.id };
 
     const token = this.jwtService.sign(payload);
 
