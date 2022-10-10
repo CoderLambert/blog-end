@@ -11,31 +11,6 @@ import {
 import { User, UserRole } from '@prisma/client';
 import { ApiProperty, PartialType, PickType } from '@nestjs/swagger';
 
-// https://nestjs.bootcss.com/openapi/mapped-types
-export class LoginUserDto {
-  @ApiProperty({
-    example: 'lambert',
-    description: '用户名或者用户邮箱',
-  })
-  @IsNotEmpty({
-    message: '用户名不能为空',
-  })
-  username: string;
-
-  @ApiProperty({
-    example: '12345678',
-    description: '用户密码',
-  })
-  @IsString()
-  @IsNotEmpty()
-  @MinLength(8, {
-    message: '密码长度必须大于等于8',
-  })
-  @MaxLength(20, {
-    message: '密码长度必须小于等于20',
-  })
-  password: string;
-}
 
 export class UserDto implements User {
   @IsNumberString()
@@ -110,3 +85,17 @@ export class UserInfoDto extends PickType(UserDto, [
 ] as const) { }
 
 export class UpdateUserDto extends PartialType(CreateUserDto) { }
+
+// https://nestjs.bootcss.com/openapi/mapped-types
+export class LoginUserDto extends PickType(UserDto, [
+  'password'
+]) {
+  @ApiProperty({
+    example: 'lambert',
+    description: '用户名或者用户邮箱',
+  })
+  @IsNotEmpty({
+    message: '用户名不能为空',
+  })
+  username: string;
+}
