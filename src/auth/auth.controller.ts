@@ -8,6 +8,7 @@ import {
   Post,
   UseGuards,
   Request,
+  ParseIntPipe,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import {
@@ -18,6 +19,7 @@ import {
 } from '../user/dto/index.dto';
 import {
   ApiBadRequestResponse,
+  ApiBearerAuth,
   ApiBody,
   ApiExtraModels,
   ApiForbiddenResponse,
@@ -61,7 +63,6 @@ export class AuthController {
     return await this.authService.createUser(userInfo);
   }
 
-  @SkipJwtAuth()
   @UseGuards(LocalAuthGuard)
   @Post('login')
   @ApiOperation({
@@ -71,14 +72,14 @@ export class AuthController {
   async login(@Request() req) {
     // 返回 jwt token
     const token = await this.authService.login(req.user);
-    console.log(token);
     return token;
   }
 
   @UseGuards(JwtAuthGuard)
-  // @ApiBearerAuth()
+  // 添加 token 请求头
+  @ApiBearerAuth()
   @Get('profile/:id')
-  async profile(@Param('id') id: number) {
-    return await this.userService.findOne({ id: +id });
+  async profile(@Param('id', ParseIntPipe) id: number) {
+    return await this.userService.findOne({ id });
   }
 }
