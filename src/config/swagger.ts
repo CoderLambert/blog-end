@@ -11,7 +11,7 @@ export function swaggerInit(app: INestApplication) {
     .setDescription(SITE_CONFIG.description)
     .build();
   const document = SwaggerModule.createDocument(app, options, {
-    extraModels: [UserDto]
+    extraModels: [UserDto],
   });
   SwaggerModule.setup('api-doc', app, document, {
     explorer: true, // 开启搜索列

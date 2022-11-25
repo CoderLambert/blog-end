@@ -11,7 +11,6 @@ import {
 import { User, UserRole } from '@prisma/client';
 import { ApiProperty, PartialType, PickType } from '@nestjs/swagger';
 
-
 export class UserDto implements User {
   @IsNumberString()
   id: number;
@@ -71,8 +70,8 @@ export class CreateUserDto extends PickType(UserDto, [
   'name',
   'email',
   'password',
-  'role'
-] as const) { }
+  'role',
+] as const) {}
 
 export class UserInfoDto extends PickType(UserDto, [
   'id',
@@ -82,14 +81,12 @@ export class UserInfoDto extends PickType(UserDto, [
   'createdAt',
   'lastLoginAt',
   'role',
-] as const) { }
+] as const) {}
 
-export class UpdateUserDto extends PartialType(CreateUserDto) { }
+export class UpdateUserDto extends PartialType(CreateUserDto) {}
 
 // https://nestjs.bootcss.com/openapi/mapped-types
-export class LoginUserDto extends PickType(UserDto, [
-  'password'
-]) {
+export class LoginUserDto extends PickType(UserDto, ['password']) {
   @ApiProperty({
     example: 'lambert',
     description: '用户名或者用户邮箱',

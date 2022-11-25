@@ -12,7 +12,6 @@ async function bootstrap() {
   app.useGlobalPipes(new ValidationPipe());
 
   const httpAdapterHost = app.get(HttpAdapterHost);
-
   app.useGlobalFilters(new AllExceptionsFilter(httpAdapterHost));
   // 跨域
   app.enableCors();
@@ -21,6 +20,5 @@ async function bootstrap() {
   app.use(helmet());
 
   await app.listen(3000);
-  console.log(await app.getUrl());
 }
 bootstrap();
