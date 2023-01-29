@@ -1,5 +1,4 @@
 import { LocalAuthGuard } from './guards/local-auth.guard';
-import { AuthGuard } from '@nestjs/passport';
 import {
   Body,
   Param,
