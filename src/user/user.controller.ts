@@ -10,7 +10,9 @@ import {
   Patch,
   Post,
   Query,
+  UseGuards,
 } from '@nestjs/common';
+
 import { UserService } from './user.service';
 import {
   ApiBadRequestResponse,
@@ -20,6 +22,7 @@ import {
   ApiOkResponse,
   ApiOperation,
   ApiTags,
+  ApiBearerAuth,
 } from '@nestjs/swagger';
 import { PaginatedDto } from '../dtos';
 import { ApiPaginatedResponse } from '../decorators';
@@ -30,7 +33,8 @@ import {
   UserInfoDto,
 } from './dto/index.dto';
 import { SkipJwtAuth } from '../auth/constants';
-
+import { AuthGuard } from '@nestjs/passport';
+import { JwtAuthGuard } from '../auth/guards/jwt.guard';
 @ApiTags('用户相关')
 @ApiForbiddenResponse({ description: '无操作权限' })
 @ApiInternalServerErrorResponse()
@@ -40,12 +44,14 @@ import { SkipJwtAuth } from '../auth/constants';
 @ApiBadRequestResponse({
   description: '客户端请求错误',
 })
+@UseGuards(JwtAuthGuard)
 @Controller('users')
 export class UserController {
   constructor(private readonly userService: UserService) {
   }
 
   @Post()
+  @ApiBearerAuth()
   @ApiOperation({
     summary: '创建用户',
   })
@@ -82,6 +88,7 @@ export class UserController {
   }
 
   @Patch(':id')
+  @ApiBearerAuth()
   async update(
     @Param('id', ParseIntPipe) id: number,
     @Body() updateUserDto: UpdateUserDto,
@@ -93,6 +100,7 @@ export class UserController {
   }
 
   @Delete(':id')
+  @ApiBearerAuth()
   @ApiOperation({
     summary: '删除所有用户',
   })
@@ -103,6 +111,7 @@ export class UserController {
   }
 
   @Delete('/')
+  @ApiBearerAuth()
   async removeAll() {
     await this.userService.removeAll();
     return [];

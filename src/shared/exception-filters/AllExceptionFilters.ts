@@ -12,7 +12,7 @@ import { Prisma } from '@prisma/client';
 
 @Catch()
 export class AllExceptionsFilter implements ExceptionFilter {
-  constructor(private readonly httpAdapterHost: HttpAdapterHost) {}
+  constructor(private readonly httpAdapterHost: HttpAdapterHost) { }
 
   catch(exception: unknown, host: ArgumentsHost): void {
     // In certain situations `httpAdapter` might not be available in the
@@ -34,7 +34,7 @@ export class AllExceptionsFilter implements ExceptionFilter {
       if (exception.code === 'P2002') {
         responseBody = {
           statusCode: HttpStatus.CONFLICT,
-          message: '当前用户邮箱已注册',
+          message: '当前对象已存在',
         };
       }
       if (exception.code === 'P2025') {

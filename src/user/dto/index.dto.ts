@@ -71,7 +71,7 @@ export class CreateUserDto extends PickType(UserDto, [
   'email',
   'password',
   'role',
-] as const) {}
+] as const) { }
 
 export class UserInfoDto extends PickType(UserDto, [
   'id',
@@ -81,9 +81,9 @@ export class UserInfoDto extends PickType(UserDto, [
   'createdAt',
   'lastLoginAt',
   'role',
-] as const) {}
+] as const) { }
 
-export class UpdateUserDto extends PartialType(CreateUserDto) {}
+export class UpdateUserDto extends PartialType(CreateUserDto) { }
 
 // https://nestjs.bootcss.com/openapi/mapped-types
 export class LoginUserDto extends PickType(UserDto, ['password']) {
