@@ -15,7 +15,6 @@ import { JWT_CONFIG } from '../config/jwt';
 @Module({
   imports: [
     PrismaModule,
-    UserModule,
     //  确定默认密码策略
     //  http://doc.25years.xyz/#/nestjs/security?id=%e8%ae%a4%e8%af%81%ef%bc%88authentication%ef%bc%89
     PassportModule.register({ defaultStrategy: 'jwt' }),
@@ -27,4 +26,4 @@ import { JWT_CONFIG } from '../config/jwt';
   providers: [AuthService, UserService, LocalStrategy, JwtStrategy],
   controllers: [AuthController],
 })
-export class AuthModule {}
+export class AuthModule { }
